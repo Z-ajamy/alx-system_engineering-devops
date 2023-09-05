@@ -1,2 +1,2 @@
 #!/bin/bash
-tr -d '.' <<< "${WATER//./}""${STIR//./}"
+echo "$WATER$STIR" | tr -d '.' | tr 'a-z' 'zabcdefghijklmnopqrstuvwxy'
