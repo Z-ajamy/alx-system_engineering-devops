@@ -1,2 +1,2 @@
 #!/bin/bash
-printf "%s" "${WATER}${STIR}" | tr -d '.' | tr '[a-z]' '[zabcdefghijklmnopqrstuvwxy]'
+echo $(printf %o $(($((5#$(echo $WATER | tr 'water' '01234'))) + $((5#$(echo $STIR | tr 'stir.' '01234'))))) | tr '01234567' 'bestchol')
