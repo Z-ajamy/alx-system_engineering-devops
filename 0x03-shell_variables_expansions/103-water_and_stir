@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "$WATER$STIR" | tr -d '.' | tr 'a-z' 'zabcdefghijklmnopqrstuvwxy'
+printf "%s" "${WATER}${STIR}" | tr -d '.' | tr '[a-z]' '[zabcdefghijklmnopqrstuvwxy]'
