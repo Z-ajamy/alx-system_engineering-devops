@@ -1,0 +1,2 @@
+3-paths
+echo $PATH | tr ":" "\n" | wc -l
