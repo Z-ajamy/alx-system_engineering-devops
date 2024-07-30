@@ -1,55 +1,80 @@
 #!/usr/bin/python3
 """
-Module: write_todo_data
+Module: export_all_to_json
 
-This module writes a dictionary of to-do list data to a JSON file.
+This module fetches to-do list information for all employees from the
+JSONPlaceholder API and exports the data to a JSON file named
+'todo_all_employees.json'.
 
 The data is organized by employee IDs, with each ID mapping to a list of
 tasks associated with that employee. Each task includes the username of the
 employee, the task title, and whether the task is completed.
-
-Example data format:
-{
-    "1": [
-        {"username": "Bret", "task": "delectus aut autem", "completed": False},
-        {"username": "Bret", "task": "quis ut nam facilis et officia qui",
-        "completed": False}
-    ],
-    "2": [
-        {"username": "Antonette", "task": "suscipit repellat esse quibusdam
-        voluptatem incidunt", "completed": False},
-        {"username": "Antonette", "task": "distinctio vitae autem nihil ut
-        molestias quo", "completed": True}
-    ]
-}
 """
 
 import json
+import requests
 
-# Example data in the required format
-data = {
-    "1": [
-        {"username": "Bret", "task": "delectus aut autem", "completed": False},
-        {"username": "Bret", "task": "quis ut nam facilis et officia qui",
-         "completed": False},
-        # Add more tasks here...
-    ],
-    "2": [
-        {"username": "Antonette", "task":
-         "suscipit repellat esse quibusdam voluptatem incidunt", "completed":
-         False},
-        {"username": "Antonette", "task":
-         "distinctio vitae autem nihil ut molestias quo", "completed": True},
-        # Add more tasks here...
-    ],
-    # Add more user data here...
-}
 
-# File name
-file_name = 'todo_all_employees.json'
+def fetch_data():
+    """Fetches user and task data from the API.
 
-# Write data to JSON file
-with open(file_name, 'w', encoding='utf-8') as file:
-    json.dump(data, file, indent=4)
+    This function retrieves user information and tasks for each user from
+    the JSONPlaceholder API. It creates a dictionary where the keys are user
+    IDs and the values are lists of tasks associated with each user. Each
+    task is represented as a dictionary containing the task title, completion
+    status, and the username of the employee.
 
-print(f"Data has been written to {file_name}")
+    Returns:
+        dict: A dictionary where each key is a user ID and the value is a
+        list of task dictionaries with the structure:
+        [
+            {
+                "task": "Title of the to-do item",
+                "completed": true/false,
+                "username": "Username of the employee"
+            },
+            ...
+        ]
+    """
+    base_url = "https://jsonplaceholder.typicode.com/"
+
+    # Fetch user information
+    user_response = requests.get(f"{base_url}users")
+    users = user_response.json()
+
+    # Dictionary to hold user ID and their tasks
+    data = {}
+
+    # Fetch tasks for each user
+    for user in users:
+        user_id = user["id"]
+        username = user["username"]
+        tasks_response = requests.get(f"{base_url}todos", params={"userId":
+                                                                  user_id})
+        tasks = tasks_response.json()
+
+        # Process tasks for the user
+        data[user_id] = [{
+            "task": task["title"],
+            "completed": task["completed"],
+            "username": username
+        } for task in tasks]
+
+    return data
+
+
+def save_to_file(data):
+    """Saves the data to a JSON file.
+
+    Args:
+        data (dict): The data to be written to the file. It should be a
+        dictionary where each key is a user ID and the value is a list of
+        task dictionaries.
+    """
+    with open("todo_all_employees.json", "w", encoding='utf-8') as file:
+        json.dump(data, file, indent=4)
+
+
+if __name__ == "__main__":
+    todo_data = fetch_data()
+    save_to_file(todo_data)
