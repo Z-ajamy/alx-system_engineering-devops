@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# 
+# Module: run_as_user
+# 
+# This script runs the `whoami` command under the user specified as an argument.
+# It uses `sudo` to execute the command with the privileges of the specified user.
+# 
+# Usage:
+#   ./run_as_user.sh <username>
+# 
+# Where `<username>` is the name of the user under whom the `whoami` command will be executed.
+# 
+# Example:
+#   ./run_as_user.sh alice
+#   Output: alice
+# 
+# This script requires `sudo` privileges to switch to another user. Ensure that the user 
+# running the script has appropriate permissions to use `sudo` for switching to the target user.
+#
+# Arguments:
+#   $1 (string): The username of the user to run the `whoami` command as.
+# 
+# Returns:
+#   void
+# 
+
+# Execute the `whoami` command as the specified user
+sudo -u "$1" whoami
