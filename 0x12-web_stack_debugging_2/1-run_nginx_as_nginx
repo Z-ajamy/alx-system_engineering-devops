@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+# 
+# Module: configure_nginx
+# 
+# This script performs the following tasks:
+# 1. Updates the Nginx configuration to run as the 'nginx' user.
+# 2. Configures Nginx to listen on port 8080 instead of the default port 80.
+# 3. Reloads Nginx to apply the new configuration changes.
+# 4. Checks if Nginx is running under the 'nginx' user.
+# 5. Verifies if Nginx is listening on port 8080.
+# 
+# Usage:
+#   ./configure_nginx.sh
+# 
+# This script assumes that Nginx is already installed and that the script
+# is executed with sufficient privileges to modify configuration files and reload Nginx.
+# 
+# Script Breakdown:
+# 
+# 1. **Update Nginx to Run as nginx User**:
+#    - `sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf`
+#    - This command updates the Nginx configuration file to ensure that Nginx
+#      runs as the 'nginx' user by replacing the current 'user' directive.
+# 
+# 2. **Configure Nginx to Listen on Port 8080**:
+#    - `sed -i 's/listen 80;/listen 8080;/' /etc/nginx/sites-available/default`
+#    - `sed -i 's/listen \[::\]:80;/listen \[::\]:8080;/' /etc/nginx/sites-available/default`
+#    - These commands modify the default site configuration to change the listening port
+#      from 80 to 8080 for both IPv4 and IPv6 addresses.
+# 
+# 3. **Reload Nginx**:
+#    - `nginx -s reload`
+#    - This command reloads the Nginx server to apply the changes made to the configuration.
+# 
+# 4. **Check if Nginx is Running as nginx User**:
+#    - `ps aux | grep 'nginx' | grep -v grep`
+#    - This command lists the running processes and filters the output to show if
+#      Nginx processes are running under the 'nginx' user.
+# 
+# 5. **Check if Nginx is Listening on Port 8080**:
+#    - `nc -z 0 8080; echo $?`
+#    - This command uses `netcat` (nc) to check if there is a service listening on port 8080.
+#      The exit status of the `nc` command is printed to indicate success (0) or failure (non-zero).
+# 
+# Prerequisites:
+# - The script should be run with root or sudo privileges to modify system files and reload Nginx.
+# 
+# Arguments:
+#   None
+# 
+# Returns:
+#   void
+# 
+
+# Update the Nginx configuration to run as nginx user
+sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
+
+# Configure Nginx to listen on port 8080
+sed -i 's/listen 80;/listen 8080;/' /etc/nginx/sites-available/default
+sed -i 's/listen \[::\]:80;/listen \[::\]:8080;/' /etc/nginx/sites-available/default
+
+# Reload Nginx to apply the changes
+nginx -s reload
+
+# Check if Nginx is running as nginx user
+ps aux | grep 'nginx' | grep -v grep
+
+# Check if Nginx is listening on port 8080
+nc -z 0 8080; echo $?
