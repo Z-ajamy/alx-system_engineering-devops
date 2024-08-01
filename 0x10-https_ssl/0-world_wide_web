@@ -6,46 +6,31 @@ get_subdomain_info() {
     local subdomain=$2
     local fqdn="${subdomain}.${domain}"
 
-    # Use dig to get the record type and destination
+    # Fetch DNS information
     local result=$(dig +short "$fqdn")
-    local record_type=$(dig "$fqdn" | grep -A1 'ANSWER SECTION:' | awk '{print $4}')
-    local destination=$(dig "$fqdn" | grep -A1 'ANSWER SECTION:' | awk '{print $5}')
-
-    # Check if result is empty
     if [[ -z "$result" ]]; then
         echo "No information available for ${fqdn}"
-    else
-        echo "The subdomain ${subdomain} is a ${record_type} record and points to ${destination}"
+        return
     fi
+
+    # Extract record type and destination
+    local record_type=$(dig "$fqdn" | awk '/ANSWER SECTION:/ {getline; print $4}')
+    local destination=$(dig "$fqdn" | awk '/ANSWER SECTION:/ {getline; print $5}')
+
+    # Output the result
+    echo "The subdomain ${subdomain} is a ${record_type} record and points to ${destination}"
 }
 
-# Main logic
-domain=""
-subdomain=""
-
-while [[ $# -gt 0 ]]; do
-    case $1 in
-        domain)
-            domain="$2"
-            shift 2
-            ;;
-        subdomain)
-            subdomain="$2"
-            shift 2
-            ;;
-        *)
-            shift
-            ;;
-    esac
-done
-
-# Validate if domain is provided
-if [[ -z "$domain" ]]; then
+# Check if domain is provided
+if [[ -z "$1" ]]; then
     echo "Domain parameter is required"
     exit 1
 fi
 
-# Display information for specified subdomain or default subdomains
+domain=$1
+subdomain=$2
+
+# Display information for default subdomains if no specific subdomain is provided
 if [[ -z "$subdomain" ]]; then
     for sub in www lb-01 web-01 web-02; do
         get_subdomain_info "$domain" "$sub"
