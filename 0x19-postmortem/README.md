@@ -64,6 +64,4 @@ This incident highlights the importance of proper user privilege management in p
 
 Include relevant diagrams and visuals here to help illustrate the incident and solution:
 
-![Diagram 1](https://tech.sadaalomma.com/wp-content/uploads/2024/02/f35e5770b916a231a93f14b8c3156c87.png)
-
-![Diagram 2](path/to/diagram2.png)
+![Diagram 1](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwC7BBlGgMcgm4PCY5b0Y-TPYa0rD6pjoAnA&s)
