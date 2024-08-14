@@ -13,7 +13,7 @@ def top_ten(subreddit):
         subreddit (str): The name of the subreddit to query.
     """
     # Define the URL for accessing the subreddit's hot posts in JSON format
-    url = "https://www.reddit.com/r/{}/hot/.json".format(subreddit)
+    url = f"https://www.reddit.com/r/{subreddit}/hot/.json"
 
     # Set a custom User-Agent to avoid rate-limiting by the Reddit API
     headers = {
@@ -25,17 +25,39 @@ def top_ten(subreddit):
         "limit": 10
     }
 
-    # Send a GET request to the Reddit API
-    response = requests.get(url, headers=headers, params=params,
-                            allow_redirects=False)
+    try:
+        # Send a GET request to the Reddit API
+        response = requests.get(url, headers=headers, params=params,
+                                allow_redirects=False)
 
-    # Check if the subreddit is invalid or does not exist
-    if response.status_code == 404:
+        # Check if the response is successful (status code 200)
+        if response.status_code != 200:
+            print("None")
+            return
+
+        # Check if the response content type is JSON
+        if 'application/json' not in response.headers.get('Content-Type', ''):
+            print("None")
+            return
+
+        # Extract the data from the JSON response
+        results = response.json().get("data", {})
+
+        # If results are empty, print None
+        if not results:
+            print("None")
+            return
+
+        # Iterate through the list of posts and print the title of each
+        children = results.get("children", [])
+        if not children:
+            print("None")
+            return
+
+        for post in children:
+            print(post.get("data", {}).get("title", ""))
+
+    except requests.RequestException as e:
+        # Handle any request-related errors
+        print(f"An error occurred: {e}")
         print("None")
-        return
-
-    # Extract the data from the JSON response
-    results = response.json().get("data")
-
-    # Iterate through the list of posts and print the title of each
-    [print(c.get("data").get("title")) for c in results.get("children")]

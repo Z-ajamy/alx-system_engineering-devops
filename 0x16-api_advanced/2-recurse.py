@@ -30,7 +30,8 @@ def recurse(subreddit, hot_list=None, after="", count=0):
     params = {"after": after, "count": count, "limit": 100}
 
     try:
-        response = requests.get(url, headers=headers, params=params, allow_redirects=False)
+        response = requests.get(url, headers=headers, params=params,
+                                allow_redirects=False)
         if response.status_code == 404:
             return None
         results = response.json().get("data", {})
