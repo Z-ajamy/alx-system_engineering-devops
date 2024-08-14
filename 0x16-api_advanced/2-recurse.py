@@ -23,13 +23,14 @@ def recurse(subreddit, hot_list=None, after="", count=0):
     if hot_list is None:
         hot_list = []
 
+    print(f"Calling recurse with after={after}, count={count}")  # Debugging
+
     url = f"https://www.reddit.com/r/{subreddit}/hot/.json"
     headers = {"User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"}
     params = {"after": after, "count": count, "limit": 100}
 
     try:
-        response = requests.get(url, headers=headers, params=params,
-                                allow_redirects=False)
+        response = requests.get(url, headers=headers, params=params, allow_redirects=False)
         if response.status_code == 404:
             return None
         results = response.json().get("data", {})
@@ -44,5 +45,6 @@ def recurse(subreddit, hot_list=None, after="", count=0):
         hot_list.append(c.get("data", {}).get("title", ""))
 
     if after:
+        print(f"Recursing with after={after}, count={count}")  # Debugging
         return recurse(subreddit, hot_list, after, count)
     return hot_list
