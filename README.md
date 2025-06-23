@@ -225,13 +225,6 @@ This repository is for educational purposes as part of the ALX Software Engineer
 3. Help fellow students through peer learning
 4. Report issues or suggest improvements through proper channels
 
-## Author
-
-**[Your Name]**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
-
 ## License
 
 This project is part of the ALX Software Engineering Program curriculum. All rights reserved to ALX and Holberton School.

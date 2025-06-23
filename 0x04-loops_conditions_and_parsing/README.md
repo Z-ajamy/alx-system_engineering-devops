@@ -346,12 +346,4 @@ chmod +x script_name
 shellcheck script_name
 ```
 
-## Author
-
-**[Your Name]**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- ALX Student ID: [Your Student ID]
-
----
-
 **ALX Software Engineering Program** | *0x04. Loops, conditions and parsing*
