@@ -4,13 +4,13 @@ i=0
 j=0
 
 while ((i<13)); do
-    
+    echo "Hour: " $i
+
     while ((j<60)); do
         echo $j
         ((j++))
         done
 
-    echo "Hour: " $i
     j=0
     ((i++))
 done
