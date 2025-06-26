@@ -6,7 +6,7 @@ if [ ! -e "school" ]; then
     exit 0
 fi
 
-echo "school file is exists"
+echo "school file exists"
 
 if [ ! -s "school" ]; then
     echo "school file is empty"
