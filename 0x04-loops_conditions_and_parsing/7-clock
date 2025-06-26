@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #Clock
-i=0
+i=1
 j=0
 
 while ((i<13)); do
