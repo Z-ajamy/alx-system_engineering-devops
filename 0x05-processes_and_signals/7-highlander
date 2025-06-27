@@ -5,7 +5,7 @@ invincible(){
     echo "I am invincible!!!"
 }
 
-trap invincible TERM
+trap invincible TERM 
 
 while ((1)); do
     echo "To infinity and beyond"
