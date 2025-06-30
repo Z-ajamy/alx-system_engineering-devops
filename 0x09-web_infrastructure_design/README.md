@@ -275,6 +275,7 @@ Read or watch:
 └── 3-scale_up
 ```
 
+
 ## Submission Guidelines
 1. Create whiteboard diagrams for each task
 2. Take clear screenshots of your diagrams
