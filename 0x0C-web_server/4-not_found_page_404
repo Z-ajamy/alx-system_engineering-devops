@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# This script sets up a web server with a custom 404 page.
+
+# Update package lists and install Nginx
+sudo apt-get update -y
+sudo apt-get install -y nginx
+
+# === Configure the "Hello World!" page ===
+echo "Hello World!" | sudo tee /var/www/html/index.html
+
+# === Configure the 301 redirection for /redirect_me ===
+REDIRECT_CONFIG="\n\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}"
+sudo sed -i "/server_name _;/a Fichier_de_redirection" /etc/nginx/sites-available/default
+sudo sed -i "s|Fichier_de_redirection|$REDIRECT_CONFIG|" /etc/nginx/sites-available/default
+# === NEW STEPS FOR THE 404 PAGE ===
+
+# 1. Create the custom 404 HTML page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+
+# 2. Configure Nginx to use the custom 404 page
+# This command adds the error_page directive inside the server block
+ERROR_PAGE_CONFIG="\n\terror_page 404 /404.html;\n\tlocation = /404.html {\n\t\tinternal;\n\t}"
+sudo sed -i "/server_name _;/a Fichier_de_redirection" /etc/nginx/sites-available/default
+sudo sed -i "s|Fichier_de_redirection|$ERROR_PAGE_CONFIG|" /etc/nginx/sites-available/default
+# === END OF NEW STEPS ===
+
+# Restart Nginx to apply all changes
+sudo service nginx restart
