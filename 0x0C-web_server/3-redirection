@@ -10,7 +10,8 @@ nginx -s reload
 
 REDIRECT_CONFIG="\n\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}"
 
-sudo sed -i "/server_name _;/a Fichier_de_redirection" /etc/nginx/sites-available/default
-sudo sed -i "s|Fichier_de_redirection|$REDIRECT_CONFIG|" /etc/nginx/sites-available/default
+sed -i "/server_name _;/a Fichier_de_redirection" /etc/nginx/sites-available/default
+sed -i "s|Fichier_de_redirection|$REDIRECT_CONFIG|" /etc/nginx/sites-available/default
 
-sudo service nginx restart
+
+service nginx restart
