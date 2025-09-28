@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# installs nginx and configures it on a remote server
+# This script sets up a web server for redirection.
+
+apt update -y
+apt install -y nginx
+echo "Hello World!" > /var/www/html/index.html
+nginx -s reload
+
+
+REDIRECT_CONFIG="\n\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}"
+
+sudo sed -i "/server_name _;/a Fichier_de_redirection" /etc/nginx/sites-available/default
+sudo sed -i "s|Fichier_de_redirection|$REDIRECT_CONFIG|" /etc/nginx/sites-available/default
+
+sudo service nginx restart
