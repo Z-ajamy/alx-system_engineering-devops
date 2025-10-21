@@ -65,8 +65,6 @@ def export_to_json(user_data, todos_list):
         print("Missing user data or todos, cannot export to JSON.")
         return
 
-    # 1. بناء قائمة المهام بالتنسيق المطلوب
-    # (لاحظ المفاتيح الجديدة "task" و "username" كما طلب السؤال)
     json_task_list = []
     for task in todos_list:
         json_task_list.append({
@@ -75,15 +73,12 @@ def export_to_json(user_data, todos_list):
             "username": username
         })
 
-    # 2. بناء القاموس النهائي (المفتاح هو user_id)
     json_output = {user_id: json_task_list}
 
-    # 3. تحديد اسم الملف والكتابة
     filename = f"{user_id}.json"
 
     try:
         with open(filename, "w", encoding="UTF-8") as f:
-            # json.dump تكتب القاموس (dict) في الملف
             json.dump(json_output, f)
     except IOError as e:
         print(f"Error writing to JSON file: {e}")
