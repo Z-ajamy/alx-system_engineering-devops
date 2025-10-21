@@ -81,11 +81,11 @@ if len(argv) == 2:
 
                 if todos_dict:
                     done_list = []
-                    
+
                     for task in todos_dict:
                         if task["completed"] == True:
                             done_list.append(task["title"])
 
-                    print("Employee {} has completed {}/{} tasks".format(user_dict["name"], len(done_list), len(todos_dict)))
+                    print("Employee {} has completed {}/{} tasks:".format(user_dict["name"], len(done_list), len(todos_dict)))
                     for title in done_list:
                         print("\t {}".format(title))
