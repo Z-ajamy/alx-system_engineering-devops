@@ -71,17 +71,13 @@ if len(argv) == 2:
     if response_user.status_code == 200:
         user_dict = response_user.json()
         user_id = user_dict.get("id", None)
-
         if user_id:
             api_todos_endpoint = "https://jsonplaceholder.typicode.com/todos?userId={}".format(user_id)
             response_todos = requests.get(api_todos_endpoint)
-
             if response_todos.status_code == 200:
                 todos_dict = response_todos.json()
-
                 if todos_dict:
                     done_list = []
-
                     for task in todos_dict:
                         if task["completed"] == True:
                             done_list.append(task["title"])
