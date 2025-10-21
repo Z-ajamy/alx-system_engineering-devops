@@ -8,6 +8,7 @@ It provides task completion statistics and exports data to CSV format.
 
 from sys import argv, exit
 import requests
+import csv
 
 
 def fetch_user_data(user_id):
@@ -126,35 +127,39 @@ def display_progress(user_data, task_progress):
     for title in titles:
         print(f"\t {title}")
 
-
-def export_to_csv(user_data, data_list):
-    """Export task data to CSV file.
+def export_to_csv(user_data, todos_list):
+    """Export task data to CSV file in the format required by the checker.
     
-    Creates a CSV file named {user_id}.csv containing all tasks for the user
-    with columns for user ID, username, completion status, and task title.
+    Creates a CSV file named {user_id}.csv with columns for
+    user ID, username, completion status, and task title.
     
     Args:
-        user_data (dict): User information dictionary containing 'id' and 'name'.
+        user_data (dict): User info dictionary containing 'id' and 'username'.
         data_list (list): List of task dictionaries to export.
-    
-    Raises:
-        IndexError: If user_data structure is invalid.
-    
-    Examples:
-        >>> export_to_csv({'id': 1, 'name': 'John'}, [{'userId': 1, 'completed': True, 'title': 'Task'}])
     """
-    if user_data and data_list:
-        try:
-            userId = user_data.get("id", None)
-        except IndexError as e:
-            print(e)
-            return
-        if userId == None:
-            return
-        
-        with open(f'{userId}.csv', "w", encoding="UTF-8") as f:
-            for ele in data_list:
-                f.write(f'\"{ele["userId"]}\",\"{user_data["name"]}\",\"{ele["completed"]}\",\"{ele["title"]}\"\n')
+    user_id = user_data.get("id")
+    username = user_data.get("username")
+
+    if not user_id or not username or todos_list is None:
+        return 
+
+    filename = f"{user_id}.csv"
+    
+    try:
+        with open(filename, "w", encoding="UTF-8", newline='') as f:
+            
+            writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+            
+            for task in todos_list:
+                writer.writerow([
+                    user_id,
+                    username,
+                    task.get("completed"),
+                    task.get("title")
+                ])
+    except IOError as e:
+        print(f"Error writing to CSV file: {e}")
+
 
 
 def main():
