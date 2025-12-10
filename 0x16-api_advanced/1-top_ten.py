@@ -13,7 +13,7 @@ def top_ten(subreddit: str) -> None:
             return
 
         data = response.json()
-        if not data:
+        if "data" not in data or "children" not in data["data"]:
             print (None)
             return
 
